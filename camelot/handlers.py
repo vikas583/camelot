@@ -173,8 +173,11 @@ class PDFHandler(object):
             pages = [os.path.join(tempdir, f"page-{p}.pdf") for p in self.pages]
             parser = Lattice(**kwargs) if flavor == "lattice" else Stream(**kwargs)
             for p in pages:
-                t = parser.extract_tables(
-                    p, suppress_stdout=suppress_stdout, layout_kwargs=layout_kwargs
-                )
-                tables.extend(t)
+                try:
+                    t = parser.extract_tables(
+                        p, suppress_stdout=suppress_stdout, layout_kwargs=layout_kwargs
+                    )
+                    tables.extend(t)
+                except:
+                    continue
         return TableList(sorted(tables))
